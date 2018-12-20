@@ -8,6 +8,7 @@ contract RecordBook
 	uint public counter;
 
 	event ShowRecord(uint count);
+	event ShowMyRecord(string _Name, uint _Record);
 	
 	struct Record
 	{
@@ -41,6 +42,12 @@ contract RecordBook
 		MyRecord[msg.sender].UnitRecord = ID;
 
 		MyRecord[msg.sender].CanUpload = false;
+		emit ShowRecord(counter);
+	}
+	
+	function Show() public
+	{
+	    emit ShowMyRecord(MyRecord[msg.sender].UnitName, MyRecord[msg.sender].UnitRecord);
 	}
 
 	function EndApp() public
