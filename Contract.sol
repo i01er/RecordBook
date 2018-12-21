@@ -12,6 +12,7 @@ contract RecordBook
 	
 	struct Record
 	{
+		string	UintProject;
 		string	UnitName;
 		uint	UnitRecord;
 		bool 	CanUpload;
@@ -32,12 +33,13 @@ contract RecordBook
 		MyRecord[User].CanUpload = true;
 	}
 
-	function Add(string memory Company, uint ID) public
+	function Add(string memory Project, string memory Company, uint ID) public
 	{
 		require(now < auctionEnd);
 		require(MyRecord[msg.sender].CanUpload);
 	    	
 		counter += 1;
+		MyRecord[msg.sender].UnitProject = Project;
 		MyRecord[msg.sender].UnitName = Company;
 		MyRecord[msg.sender].UnitRecord = ID;
 
@@ -47,7 +49,7 @@ contract RecordBook
 	
 	function Show() public
 	{
-	    emit ShowMyRecord(MyRecord[msg.sender].UnitName, MyRecord[msg.sender].UnitRecord);
+	    emit ShowMyRecord(MyRecord[msg.sender].UnitProject, MyRecord[msg.sender].UnitName, MyRecord[msg.sender].UnitRecord);
 	}
 
 	function EndApp() public
