@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<head>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.37/dist/web3.min.js"></script>
+	<!-- <script type="text/javascript" src="script.js"></script> -->
+	<!-- <link type="text/css" rel="stylesheet" href="style.css"> -->
+
+	<title>Upload</title>
+</head>
+
+<body>
+	<h1 id="title">RecordBook - Admin Page</h1>
+
+	<a href="index.html" class="button button_w" style="background-color: #79BD9A;" type="button">User</a>
+	<a href="admin.html" class="button button_w" style="background-color: #3B8686;" type="button">Admin</a>
+
+	<br><br>
+
+	<table style="width:100%">
+	  <tr><th colspan="2">Admin Information</th></tr>
+	  	<td style="width:30%">Address</td>
+	  	<td id="client_address">0x0</td>
+	</table>
+
+	<br><br>
+
+	<table style="width:100%">
+	  <tr><th colspan="2">Project Information</th></tr>
+	  <tr>
+	    <td  style="width:30%">Company Name</td>
+	    <td id="company_name">Disney.Ltd</td> 
+	  </tr>
+	  <tr>
+	    <td  style="width:30%">Company ID</td>
+	    <td id="company_id">110457</td> 
+	  </tr>
+	  <tr>
+	  	<td>Document Name</td>
+	  	<td>110457project.pdf</td>
+	  </tr>
+	  <tr>
+	  	<td>Document Hash</td>
+	  	<td id="TheHash"></td>
+	  </tr>
+	</table>
+	<br>
+	<!-- <button class="button button_n" type="button" onclick="upload()">Upload</button> -->
+	<!-- <br><br> -->
+	<!-- <button class="button button_n" style="background-color: #79BD9A;" type="button" onclick="reset()">Reset</button> -->
+	<!-- <br><br> -->
+<!-- 	<button class="button button_n" style="background-color: #3B8686;" type="button" onclick="connect()">Connect</button>
+	<br><br>
+	<button class="button button_n" style="background-color: #0B486B;" type="button" onclick="check()">Check</button> -->
+</body>
+
+<script>
+	if (typeof web3 !== 'undefined') 
+	{
+	 	web3 = new Web3(web3.currentProvider);
+	 	console.log("using MetaMask");
+	} 
+	else 
+	{
+		// set the provider you want from Web3.providers
+		web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+		console.log("using localhost");
+	 }
+	web3.eth.defaultAccount = web3.eth.accounts[0];
+	// var AccountAddress = web3.eth.accounts[0];
+
+	var ContractABI = 	[
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_hash",
+					"type": "string"
+				}
+			],
+			"name": "uploadhash",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "get",
+			"outputs": [
+				{
+					"name": "",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "hash",
+			"outputs": [
+				{
+					"name": "",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		}
+	];
+	var ContractAddress = "0x734937ca1d2ddf24b513119de1650f9aed5517c3";
+
+	console.log("Creating Address...");
+	var TheContract = new web3.eth.Contract(ContractABI, ContractAddress);
+	console.log("Contract Created");
+	console.log(TheContract);
+	// TheContract.options.address = '0x50f4d4bdea1f6e52d959bbdfff4584ddaa7d29d2';
+
+//The functions-----------------------------------
+		var getAC = web3.eth.getAccounts();
+		var Add = Promise.resolve(getAC);
+		Add.then(function(Add){(document.getElementById("client_address").innerHTML = Add)});
+
+		console.log("calling check");
+		var gethash = TheContract.methods.get().call();
+		console.log(gethash);
+		var _hash = Promise.resolve(gethash);
+		_hash.then(function(_hash){(document.getElementById("TheHash").innerHTML = _hash)});
+		console.log("function called");
+</script>
+
+<style type="text/css">
+	table {
+	border-collapse: collapse;
+	}
+	table, th, td {
+	  border: 2px solid #79BD9A;
+	}
+
+	.button {
+	  display: inline-block;
+	  padding: 10px 25px;
+	  font-size: 24px;
+	  cursor: pointer;
+	  text-align: center;
+	  text-decoration: none;
+	  outline: none;
+	  color: #fff;
+	  background-color: #0B486B;
+	  border: none;
+	  /*border-radius: 15px;*/
+	  /*box-shadow: 0 9px #999;*/
+	}
+
+	.button:hover {background-color: #0B486B}
+
+	.button:active {
+	  background-color: #0B486B;
+	  /*box-shadow: 0 5px #666;*/
+	  transform: translateY(4px);
+	}
+
+	.button_n {width: 100%;}
+	
+	.button_w {width: 20%;}
+
+	.input {width: 90%;}
+</style>
